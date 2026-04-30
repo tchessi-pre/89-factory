@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import type React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Menu, Xmark, MapPin } from "iconoir-react"
@@ -73,6 +74,32 @@ export function Header() {
     if (closeMobileMenu) setIsOpen(false)
   }
 
+  const scrollToHash = (hash: string) => {
+    const id = normalizeHash(hash).replace("#", "")
+    const target = document.getElementById(id)
+    if (!target) return
+
+    const header = document.querySelector("header")
+    const headerHeight = header ? Math.ceil(header.getBoundingClientRect().height) : 0
+    const top = target.getBoundingClientRect().top + window.scrollY - headerHeight - 8
+
+    window.scrollTo({ top, behavior: "smooth" })
+  }
+
+  const handleAnchorClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    hash: string,
+    closeMobileMenu?: boolean
+  ) => {
+    handleNavClick(hash, closeMobileMenu)
+
+    if (pathname !== "/") return
+
+    e.preventDefault()
+    window.history.pushState(null, "", normalizeHash(hash))
+    scrollToHash(hash)
+  }
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -96,7 +123,7 @@ export function Header() {
               href="/#top"
               className={getNavLinkClassName(pathname === "/" && activeHash === "#top")}
               aria-current={pathname === "/" && activeHash === "#top" ? "page" : undefined}
-              onClick={() => handleNavClick("#top")}
+              onClick={(e) => handleAnchorClick(e, "#top")}
             >
               Accueil
             </Link>
@@ -104,7 +131,7 @@ export function Header() {
               href="/#menu"
               className={getNavLinkClassName(pathname === "/" && activeHash === "#menu")}
               aria-current={pathname === "/" && activeHash === "#menu" ? "page" : undefined}
-              onClick={() => handleNavClick("#menu")}
+              onClick={(e) => handleAnchorClick(e, "#menu")}
             >
               Menu
             </Link>
@@ -112,7 +139,7 @@ export function Header() {
               href="/#location"
               className={getNavLinkClassName(pathname === "/" && activeHash === "#location")}
               aria-current={pathname === "/" && activeHash === "#location" ? "page" : undefined}
-              onClick={() => handleNavClick("#location")}
+              onClick={(e) => handleAnchorClick(e, "#location")}
             >
               Emplacement
             </Link>
@@ -120,7 +147,7 @@ export function Header() {
               href="/#contact"
               className={getNavLinkClassName(pathname === "/" && activeHash === "#contact")}
               aria-current={pathname === "/" && activeHash === "#contact" ? "page" : undefined}
-              onClick={() => handleNavClick("#contact")}
+              onClick={(e) => handleAnchorClick(e, "#contact")}
             >
               Contact
             </Link>
@@ -157,7 +184,7 @@ export function Header() {
                 href="/#top"
                 className={getNavLinkClassName(pathname === "/" && activeHash === "#top", true)}
                 aria-current={pathname === "/" && activeHash === "#top" ? "page" : undefined}
-                onClick={() => handleNavClick("#top", true)}
+                onClick={(e) => handleAnchorClick(e, "#top", true)}
               >
                 Accueil
               </Link>
@@ -165,7 +192,7 @@ export function Header() {
                 href="/#menu"
                 className={getNavLinkClassName(pathname === "/" && activeHash === "#menu", true)}
                 aria-current={pathname === "/" && activeHash === "#menu" ? "page" : undefined}
-                onClick={() => handleNavClick("#menu", true)}
+                onClick={(e) => handleAnchorClick(e, "#menu", true)}
               >
                 Menu
               </Link>
@@ -173,7 +200,7 @@ export function Header() {
                 href="/#location"
                 className={getNavLinkClassName(pathname === "/" && activeHash === "#location", true)}
                 aria-current={pathname === "/" && activeHash === "#location" ? "page" : undefined}
-                onClick={() => handleNavClick("#location", true)}
+                onClick={(e) => handleAnchorClick(e, "#location", true)}
               >
                 Emplacement
               </Link>
@@ -181,7 +208,7 @@ export function Header() {
                 href="/#contact"
                 className={getNavLinkClassName(pathname === "/" && activeHash === "#contact", true)}
                 aria-current={pathname === "/" && activeHash === "#contact" ? "page" : undefined}
-                onClick={() => handleNavClick("#contact", true)}
+                onClick={(e) => handleAnchorClick(e, "#contact", true)}
               >
                 Contact
               </Link>
