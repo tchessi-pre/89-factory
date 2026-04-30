@@ -1,21 +1,51 @@
 "use client"
 
+import { useEffect, useRef, useState } from "react"
 import { ArrowDown, FastArrowRight, Phone } from "iconoir-react"
 import Link from "next/link"
-import Image from "next/image"
 
 export function Hero() {
+  const [showContent, setShowContent] = useState(false)
+  const hasRevealedRef = useRef(false)
+
+  const reveal = () => {
+    if (hasRevealedRef.current) return
+    hasRevealedRef.current = true
+    window.setTimeout(() => setShowContent(true), 3000)
+  }
+
+  useEffect(() => {
+    const timeoutId = window.setTimeout(() => {
+      setShowContent(true)
+    }, 5000)
+
+    return () => window.clearTimeout(timeoutId)
+  }, [])
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-black">
+    <section id="top" className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden bg-black">
+      <video
+        className="absolute inset-0 w-full h-full object-cover"
+        src="/cheeseburger-with-steaming-patty-and-fresh.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        onPlaying={reveal}
+        onCanPlay={reveal}
+      />
+      <div className="absolute inset-0 bg-black/60" />
       {/* Decorative Elements */}
       <div className="absolute top-1/4 left-10 w-64 h-64 bg-primary/20 rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-1/4 right-10 w-80 h-80 bg-amber-600/20 rounded-full blur-3xl animate-pulse" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
-          <div className="text-center md:text-left order-2 md:order-1">
+      <div
+        className={`relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-700 ease-out ${showContent ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
+          }`}
+      >
+        <div className="flex flex-col items-center text-center">
+          <div className="w-full max-w-3xl">
             {/* Halal Badge */}
             <div className="inline-flex items-center gap-3 mb-6">
               <img
@@ -27,19 +57,19 @@ export function Hero() {
 
             {/* Main Title */}
             <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-4">
-              <span className="text-primary">89</span>
+              <span className="text-foreground">89</span>
               <br />
               <span className="text-foreground">FACTORY</span>
             </h1>
 
             {/* Tagline */}
             <p className="text-xl sm:text-2xl md:text-3xl text-muted-foreground font-light tracking-wide mb-8 max-w-2xl mx-auto">
-              Là où la saveur prend la route
+              LE GOÛT QUI FRAPPE
             </p>
 
             {/* Description */}
             <p className="text-base sm:text-lg text-foreground/80 max-w-xl mx-auto mb-10 leading-relaxed">
-              Burgers halal premium, fried chicken croustillant et currywurst authentique — directement du food truck jusqu'à toi
+              Burgers halal premium, fried chicken croustillant et currywurst authentique
             </p>
 
             {/* CTA Buttons */}
@@ -49,7 +79,7 @@ export function Hero() {
                 className="group flex items-center gap-3 px-8 py-4 bg-primary text-primary-foreground font-bold tracking-wider rounded-lg hover:bg-primary/90 transition-all shadow-2xl shadow-primary/50 w-full sm:w-auto justify-center"
               >
                 <Phone className="w-5 h-5" />
-                +433 06 00 00 00 00
+                +33 06 00 00 00 00
               </a>
               <Link
                 href="#menu"
@@ -92,25 +122,10 @@ export function Hero() {
               </div>
             </div>
           </div>
-
-          {/* Right Content - Hero Burger */}
-          <div className="order-1 md:order-2 relative">
-            <div className="relative w-full h-[400px] md:h-[600px] flex items-center justify-center">
-              {/* Glow Effects */}
-              <div className="absolute inset-0 bg-gradient-radial from-primary/20 via-transparent to-transparent animate-pulse" />
-
-              {/* Tasty Burger - Main Hero Image */}
-              <img
-                src="/graphics/tasty burger.svg"
-                alt="Nos burgers signatures"
-                className="w-full h-full object-contain drop-shadow-[0_0_80px_rgba(251,191,36,0.5)] animate-float"
-              />
-            </div>
-          </div>
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+        <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
           <ArrowDown className="w-6 h-6 text-primary" />
         </div>
       </div>

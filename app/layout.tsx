@@ -86,8 +86,8 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
+    icon: '/graphics/logo-89-round.svg',
+    shortcut: '/graphics/logo-89-round.svg',
     apple: '/apple-touch-icon.png',
   },
   manifest: '/site.webmanifest',
