@@ -135,7 +135,7 @@ export function MenuSection() {
     <section id="menu" className="py-20 md:py-32 bg-card">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header - Restaurant Style */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <h2 className="text-5xl sm:text-6xl md:text-7xl font-black text-primary tracking-tighter mb-4">
             NOS BURGERS
           </h2>
@@ -146,7 +146,7 @@ export function MenuSection() {
 
         {/* Deal Banner - Eye-Catching */}
         <div className="mb-16 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary via-amber-00 to-primary opacity-20 animate-pulse" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary via-amber-00 to-primary opacity-0" />
           <div className="relative p-8 text-center border-4 border-primary rounded-3xl bg-card">
             <p className="text-3xl md:text-5xl font-black text-primary tracking-tight mb-2">
               OFFRE MENU
@@ -166,8 +166,8 @@ export function MenuSection() {
                 key={category.id}
                 onClick={() => setActiveCategory(category.id)}
                 className={`group flex items-center gap-3 px-8 py-4 rounded-2xl font-black text-lg tracking-tight transition-all duration-300 ${activeCategory === category.id
-                    ? "bg-primary text-primary-foreground shadow-2xl shadow-primary/50 scale-105"
-                    : "bg-card border-2 border-border text-foreground hover:border-primary/50 hover:scale-105"
+                  ? "bg-primary text-primary-foreground shadow-2xl shadow-primary/50 scale-105"
+                  : "bg-card border-2 border-border text-foreground hover:border-primary/50 hover:scale-105"
                   }`}
               >
                 <Icon className="w-6 h-6" />
@@ -178,7 +178,9 @@ export function MenuSection() {
         </div>
 
         {/* Menu Items */}
-        <MenuCategory items={menuItems[activeCategory as keyof typeof menuItems]} />
+        <div key={activeCategory} className="animate-in fade-in-0 duration-500 ease-out">
+          <MenuCategory items={menuItems[activeCategory as keyof typeof menuItems]} />
+        </div>
 
         {/* Sides & Extras - Floating Style */}
         <div className="mt-24 space-y-16">
