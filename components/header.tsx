@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import type React from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Menu, Xmark, MapPin } from "iconoir-react"
 
@@ -62,9 +63,10 @@ export function Header() {
 
   const getNavLinkClassName = (isActive: boolean, isMobile?: boolean) =>
     [
-      "text-foreground hover:text-primary transition-colors font-medium tracking-wide",
-      isMobile ? "py-2" : "",
-      isActive ? "text-primary" : "",
+      "inline-flex items-center rounded-lg font-medium tracking-wide transition-colors",
+      "text-ui-white/90 hover:text-ui-white hover:bg-ui-white/10",
+      isMobile ? "px-3 py-2" : "px-3 py-2",
+      isActive ? "text-pink-light bg-ui-white/10" : "",
     ]
       .filter(Boolean)
       .join(" ")
@@ -101,24 +103,29 @@ export function Header() {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm ">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-purple-gradient backdrop-blur-sm border-b border-ui-white/10 shadow-lg shadow-black/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
-            <img
-              src="/graphics/logo-89-round.svg"
+            <Image
+              src="/89factory-logo.png"
               alt="89 Factory"
-              className="h-8 w-8 md:h-12 md:w-12"
+              width={256}
+              height={256}
+              priority
+              className="h-10 w-auto md:h-12 drop-shadow-sm"
             />
             <div className="hidden sm:block">
-              <h1 className="text-gray-50 font-bold text-xl md:text-2xl tracking-wider uppercase">89 Factory</h1>
-              <p className="text-muted-foreground text-xs">LE GOÛT QUI FRAPPE</p>
+              <h1 className="text-ui-white font-bold text-xl md:text-2xl tracking-wider uppercase leading-none">
+                89 Factory
+              </h1>
+              <p className="text-ui-white/70 text-xs tracking-widest mt-1">Ici c&apos;est Marseille</p>
             </div>
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-2">
             <Link
               href="/#top"
               className={getNavLinkClassName(pathname === "/" && activeHash === "#top")}
@@ -151,7 +158,7 @@ export function Header() {
             >
               Contact
             </Link>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-pink-light">
               <MapPin className="w-5 h-5" />
               <span className="text-sm font-medium">Belsunce</span>
             </div>
@@ -169,7 +176,7 @@ export function Header() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-foreground hover:text-primary transition-colors"
+            className="md:hidden p-2 text-ui-white hover:text-pink-light transition-colors"
             aria-label="Ouvrir/fermer le menu"
           >
             {isOpen ? <Xmark className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -178,7 +185,7 @@ export function Header() {
 
         {/* Mobile Nav */}
         {isOpen && (
-          <nav className="md:hidden py-4 border-t border-border">
+          <nav className="md:hidden py-4 border-t border-ui-white/10">
             <div className="flex flex-col gap-4">
               <Link
                 href="/#top"
@@ -212,8 +219,8 @@ export function Header() {
               >
                 Contact
               </Link>
-              <div className="flex items-center justify-between pt-4 border-t border-border">
-                <div className="flex items-center gap-2 text-accent">
+              <div className="flex items-center justify-between pt-4 border-t border-ui-white/10">
+                <div className="flex items-center gap-2 text-pink-light">
                   <MapPin className="w-5 h-5" />
                   <span className="text-sm font-medium">Belsunce</span>
                 </div>
