@@ -38,7 +38,7 @@ export function Hero() {
 				{/* <HeroBrand isRevealed={isRevealed} /> */}
 
 				<div
-					className={`absolute bottom-28 left-6 right-6 z-10 flex flex-col gap-3 sm:left-10 sm:right-auto sm:flex-row sm:items-center transition-all duration-700 ease-out motion-reduce:transition-none ${isRevealed
+					className={`absolute bottom-10 left-6 right-6 z-10 flex flex-col gap-3 sm:left-10 sm:right-auto sm:flex-row sm:items-center md:left-1/2 md:right-auto md:-translate-x-1/2 md:justify-center transition-all duration-700 ease-out motion-reduce:transition-none ${isRevealed
 						? 'opacity-100 translate-y-0'
 						: 'opacity-0 translate-y-4 pointer-events-none'
 						}`}
