@@ -3,10 +3,8 @@ import { SectionHeader } from "./section-header"
 
 export function ContactSection() {
   return (
-    <section id="contact" className="relative py-20 md:py-32 overflow-hidden bg-purple-gradient">
-      <div className="absolute inset-0 bg-purple-gradient opacity-80" />
-      <div className="absolute -top-24 -left-24 w-80 h-80 bg-pink-dark/20 rounded-full blur-3xl" />
-      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-brand-purple-soft/20 rounded-full blur-3xl" />
+    <section id="contact" className="relative py-20 md:py-32 overflow-hidden">
+      <div className='absolute inset-0 opacity-[0.07] [background-image:radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.6)_1px,transparent_0)] [background-size:18px_18px]' />
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader
           title="CONTACT"

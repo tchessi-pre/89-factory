@@ -5,10 +5,6 @@ import { Instagram, Phone, Mail, MapPin } from "iconoir-react"
 export function Footer() {
   return (
     <footer className="relative py-12 overflow-hidden bg-purple-gradient">
-      <div className="absolute inset-0 bg-purple-gradient opacity-80" />
-      <div className="absolute -top-24 -left-24 w-80 h-80 bg-pink-dark/20 rounded-full blur-3xl" />
-      <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-brand-purple-soft/20 rounded-full blur-3xl" />
-
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           {/* Brand */}

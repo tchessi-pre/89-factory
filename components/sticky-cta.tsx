@@ -24,11 +24,6 @@ export function StickyCTA() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
           {/* Location Info with Truck */}
           <div className="flex items-center gap-2 text-ui-white">
-            <img
-              src="/graphics/truck.svg"
-              alt="Food truck"
-              className="h-8 w-8 object-contain hidden md:block"
-            />
             <div className="flex items-center gap-2 text-sm text-brand-purple ">
               <MapPin className="w-4 h-4" />
               <span className="font-bold text-brand-purple">Tous les jours</span>

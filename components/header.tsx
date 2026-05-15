@@ -9,6 +9,7 @@ import { Menu, Xmark, MapPin } from "iconoir-react"
 
 export function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isScrolled, setIsScrolled] = useState(false)
   const pathname = usePathname()
   const [activeHash, setActiveHash] = useState("#top")
 
@@ -20,6 +21,54 @@ export function Header() {
   const setActiveFromHash = (hash: string) => {
     setActiveHash(normalizeHash(hash))
   }
+
+  useEffect(() => {
+    if (pathname !== "/") return
+
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual"
+    }
+
+    if (window.location.hash) {
+      window.history.replaceState(null, "", window.location.pathname + window.location.search)
+    }
+
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" })
+    setActiveHash("#top")
+
+    return () => {
+      if ("scrollRestoration" in window.history) {
+        window.history.scrollRestoration = "auto"
+      }
+    }
+  }, [pathname])
+
+  useEffect(() => {
+    const updateScrolled = () => {
+      setIsScrolled(window.scrollY > 4)
+    }
+
+    updateScrolled()
+    window.addEventListener("scroll", updateScrolled, { passive: true })
+    return () => window.removeEventListener("scroll", updateScrolled)
+  }, [])
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsOpen(false)
+    }
+
+    window.addEventListener("keydown", onKeyDown)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener("keydown", onKeyDown)
+    }
+  }, [isOpen])
 
   useEffect(() => {
     const updateFromLocation = () => {
@@ -63,10 +112,13 @@ export function Header() {
 
   const getNavLinkClassName = (isActive: boolean, isMobile?: boolean) =>
     [
-      "inline-flex items-center rounded-lg font-medium tracking-wide transition-colors",
-      "text-ui-white/90 hover:text-ui-white hover:bg-ui-white/10",
-      isMobile ? "px-3 py-2" : "px-3 py-2",
-      isActive ? "text-pink-light bg-ui-white/10" : "",
+      "inline-flex items-center rounded-lg font-medium tracking-wide transition-all duration-200",
+      "text-ui-white/90 hover:text-ui-white",
+      "hover:bg-ui-white/10 hover:scale-[1.03]",
+      isMobile ? "px-4 py-3 text-base" : "px-3 py-2 text-sm",
+      isActive
+        ? "text-pink-light bg-ui-white/10 shadow-[inset_0_-2px_0_0] shadow-pink-light/70"
+        : "",
     ]
       .filter(Boolean)
       .join(" ")
@@ -103,29 +155,36 @@ export function Header() {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-purple-gradient backdrop-blur-sm border-b border-ui-white/10 shadow-lg shadow-black/20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 bg-purple-gradient backdrop-blur-md border-b border-black/35 ring-4 ring-black/45 ring-inset transition-shadow ${isScrolled ? "shadow-2xl shadow-black/35" : "shadow-lg shadow-black/20"
+        }`}
+    >
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.10] [background-image:radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.55)_1px,transparent_0)] [background-size:14px_14px]"
+        aria-hidden="true"
+      />
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3 min-w-0">
             <Image
               src="/89factory-logo.png"
               alt="89 Factory"
               width={256}
               height={256}
               priority
-              className="h-10 w-auto md:h-12 drop-shadow-sm"
+              className="h-16 w-24 md:h-18 drop-shadow-sm"
             />
-            <div className="hidden sm:block">
-              <h1 className="text-ui-white font-bold text-xl md:text-2xl tracking-wider uppercase leading-none">
+            <div className="block min-w-0 max-w-[9.5rem] sm:max-w-none">
+              <p className="text-ui-white font-bold text-2xl sm:text-xl md:text-2xl tracking-wider uppercase leading-none truncate">
                 89 Factory
-              </h1>
-              <p className="text-ui-white/70 text-xs tracking-widest mt-1">Ici c&apos;est Marseille</p>
+              </p>
+              <p className="text-ui-white/70 text-sm sm:text-sm md:text-xs tracking-widest mt-0.5 truncate">
+                Ici c&apos;est Marseille
+              </p>
             </div>
           </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-2">
+          <nav className="hidden md:flex items-center gap-1" aria-label="Navigation principale">
             <Link
               href="/#top"
               className={getNavLinkClassName(pathname === "/" && activeHash === "#top")}
@@ -158,35 +217,42 @@ export function Header() {
             >
               Contact
             </Link>
-            <div className="flex items-center gap-2 text-pink-light">
-              <MapPin className="w-5 h-5" />
-              <span className="text-sm font-medium">Belsunce</span>
+            <div className="flex items-center gap-2 ml-3 pl-3 border-l border-ui-white/20">
+              <div className="flex items-center gap-1.5 text-pink-light bg-ui-white/10 rounded-full px-3 py-1.5">
+                <MapPin className="w-4 h-4" />
+                <span className="text-sm font-medium">Belsunce</span>
+              </div>
             </div>
           </nav>
 
-          {/* Halal Badge */}
           <div className="hidden lg:flex items-center gap-4">
-            <img
+            <Image
               src="/graphics/halal logo.svg"
               alt="100% Halal"
+              width={48}
+              height={48}
               className="h-12 w-auto"
             />
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden p-2 text-ui-white hover:text-pink-light transition-colors"
-            aria-label="Ouvrir/fermer le menu"
+            aria-label={isOpen ? "Fermer le menu" : "Ouvrir le menu"}
+            aria-expanded={isOpen}
+            aria-controls="mobile-nav"
           >
             {isOpen ? <Xmark className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
 
-        {/* Mobile Nav */}
-        {isOpen && (
-          <nav className="md:hidden py-4 border-t border-ui-white/10">
-            <div className="flex flex-col gap-4">
+        <div
+          id="mobile-nav"
+          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+            }`}
+        >
+          <nav className="py-4 border-t border-ui-white/10" aria-label="Navigation mobile">
+            <div className="flex flex-col gap-2">
               <Link
                 href="/#top"
                 className={getNavLinkClassName(pathname === "/" && activeHash === "#top", true)}
@@ -220,19 +286,21 @@ export function Header() {
                 Contact
               </Link>
               <div className="flex items-center justify-between pt-4 border-t border-ui-white/10">
-                <div className="flex items-center gap-2 text-pink-light">
-                  <MapPin className="w-5 h-5" />
+                <div className="flex items-center gap-2 text-pink-light bg-ui-white/10 rounded-full px-3 py-1.5">
+                  <MapPin className="w-4 h-4" />
                   <span className="text-sm font-medium">Belsunce</span>
                 </div>
-                <img
+                <Image
                   src="/graphics/halal logo.svg"
                   alt="100% Halal"
+                  width={40}
+                  height={40}
                   className="h-10 w-auto"
                 />
               </div>
             </div>
           </nav>
-        )}
+        </div>
       </div>
     </header>
   )

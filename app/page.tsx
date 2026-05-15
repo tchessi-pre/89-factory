@@ -14,7 +14,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeStructuredData) }}
       />
-      <main className="min-h-screen bg-background">
+      <main className="min-h-screen bg-purple-gradient">
         <Header />
         <Hero />
         <MenuSection />
